@@ -12,3 +12,5 @@ steps:
 
       # Update the MIG startup script
       gcloud compute instance-groups managed set-startup-script ${MIG_NAME} --startup-script="${STARTUP_SCRIPT}"
+options:
+  logging: CLOUD_LOGGING_ONLY
