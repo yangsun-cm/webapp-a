@@ -5,13 +5,13 @@ steps:
     - '-c'
     - |-
       # Fetch the startup script from GitHub
-      STARTUP_SCRIPT=$(curl -sSL https://raw.githubusercontent.com/${REPO_NAME}/${BRANCH_NAME}/${COMMIT_SHA}/startup-script.sh)
 
       # Update the MIG instance template with the new startup script
-      gcloud compute instance-templates set-metadata cicd-template --metadata=startup-script="${STARTUP_SCRIPT}"
+      gcloud compute instance-templates set-metadata cicd-template --metadata=startup-script="$_STARTUP_SCRIPT"
 
       # Recreate the MIG instances
       gcloud compute instance-groups managed recreate cicd-mig
-
+substitutions:
+    _STARTUP_SCRIPT: '$(curl -sSL https://raw.githubusercontent.com/${REPO_NAME}/${BRANCH_NAME}/${COMMIT_SHA}/startup-script.sh)'
 options:
   logging: CLOUD_LOGGING_ONLY
