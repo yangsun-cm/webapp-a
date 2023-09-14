@@ -1,0 +1,4 @@
+steps:
+  # Step 1 : Update the startup script of the MIG
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['compute', 'instance-groups', 'managed', 'rolling-action', 'start-update', 'cicd-mig', '--zone', 'asia-southeast1-b']
