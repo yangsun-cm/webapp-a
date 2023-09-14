@@ -4,13 +4,14 @@ steps:
   args:
     - '-c'
     - |-
-      # Get the MIG name
-      MIG_NAME=$1
+      # Fetch the startup script from GitHub
+      STARTUP_SCRIPT=$(curl -sSL https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_BRANCH}/${GITHUB_SHA}/startup-script.sh)
 
-      # Get the startup script from GitHub
-      STARTUP_SCRIPT=$(curl -sSL https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${GITHUB_BRANCH}/${GITHUB_SHA}/startup.sh)
+      # Update the MIG instance template with the new startup script
+      gcloud compute instance-templates set-metadata ${INSTANCE_TEMPLATE_NAME} --metadata=startup-script="${STARTUP_SCRIPT}"
 
-      # Update the MIG startup script
-      gcloud compute instance-groups managed set-startup-script ${MIG_NAME} --startup-script="${STARTUP_SCRIPT}"
+      # Recreate the MIG instances
+      gcloud compute instance-groups managed recreate ${MIG_NAME}
+
 options:
   logging: CLOUD_LOGGING_ONLY
